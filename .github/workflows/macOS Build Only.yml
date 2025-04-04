@@ -15,7 +15,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
+          python-version: "3.10"
 
       - name: Install project dependencies
         run: |
@@ -26,7 +26,7 @@ jobs:
         uses: sayyid5416/pyinstaller@v1.8.0
         with:
           spec: macro_tracker_gui_clean.spec
-          python_ver: "3.9"
+          python_ver: "3.10"
           python_arch: "x64"
           pyinstaller_ver: ""
           exe_path: "./dist"
