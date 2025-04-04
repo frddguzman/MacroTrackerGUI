@@ -1,12 +1,44 @@
-      - name: Package Linux binary with CSV files
+name: Linux Build Only
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install project dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install FreeSimpleGUI matplotlib pandas pyinstaller
+
+      - name: Build executable with PyInstaller
+        run: |
+          pyinstaller --onefile --windowed macro_tracker_gui_clean.py
+
+      - name: Prepare release folder
         run: |
           mkdir release
-          cp dist/MacroTracker release/
+          cp dist/macro_tracker_gui_clean release/MacroTracker
           cp *.csv release/
-          cd release && zip -r MacroTracker-Linux.zip *
 
-      - name: Upload zipped release
+      - name: Archive for distribution
+        run: |
+          cd release
+          zip -r ../MacroTracker-Linux.zip ./*
+
+      - name: Upload packaged zip
         uses: actions/upload-artifact@v2
         with:
-          name: MacroTracker-Linux-Package
-          path: release/MacroTracker-Linux.zip
+          name: MacroTracker-Linux
+          path: MacroTracker-Linux.zip
