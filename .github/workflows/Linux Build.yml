@@ -1,12 +1,12 @@
-name: Linux Build Only
+name: macOS Build Only
 
 on:
   push:
     branches: [main]
 
 jobs:
-  build-linux:
-    runs-on: ubuntu-latest
+  build-macos:
+    runs-on: macos-latest
 
     steps:
       - name: Checkout code
@@ -30,5 +30,6 @@ jobs:
           python_arch: "x64"
           pyinstaller_ver: ""
           exe_path: "./dist"
-          upload_exe_with_name: "MacroTracker-Linux"
+          upload_exe_with_name: "MacroTracker-macOS"
           clean_checkout: false
+
