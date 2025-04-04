@@ -1,0 +1,34 @@
+name: macOS Build Only
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install project dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install FreeSimpleGUI matplotlib pandas pyinstaller
+
+      - name: Build executable with PyInstaller (.spec file)
+        uses: sayyid5416/pyinstaller@v1.8.0
+        with:
+          spec: macro_tracker_gui_clean.spec
+          python_ver: "3.9"
+          python_arch: "x64"
+          pyinstaller_ver: ""
+          exe_path: "./dist"
+          upload_exe_with_name: "MacroTracker-macOS"
+          clean_checkout: false
