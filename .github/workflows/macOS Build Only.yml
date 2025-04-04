@@ -12,19 +12,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install project dependencies
+      - name: Set up and activate virtual environment
         run: |
-          python3 -m pip install --upgrade pip
+          python3 -m venv venv
+          source venv/bin/activate
+          python -m pip install --upgrade pip
           pip install FreeSimpleGUI matplotlib pandas pyinstaller
+          pyinstaller --onefile --windowed macro_tracker_gui_clean.py
+          mkdir release
+          cp dist/macro_tracker_gui_clean release/MacroTracker
+          cp *.csv release/
+          cd release
+          zip -r ../MacroTracker-macOS.zip ./*
 
-      - name: Build executable with PyInstaller (.spec file)
-        uses: sayyid5416/pyinstaller@v1.8.0
+      - name: Upload packaged zip
+        uses: actions/upload-artifact@v3.1.3
         with:
-          spec: macro_tracker_gui_clean.spec
-          python_ver: "3.11"  # just for action context — runner uses its own
-          python_arch: "x64"
-          pyinstaller_ver: ""
-          exe_path: "./dist"
-          upload_exe_with_name: "MacroTracker-macOS"
-          clean_checkout: false
+          name: MacroTracker-macOS
+          path: MacroTracker-macOS.zip
+
 
