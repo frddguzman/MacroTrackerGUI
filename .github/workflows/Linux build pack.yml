@@ -1,0 +1,12 @@
+      - name: Package Linux binary with CSV files
+        run: |
+          mkdir release
+          cp dist/MacroTracker release/
+          cp *.csv release/
+          cd release && zip -r MacroTracker-Linux.zip *
+
+      - name: Upload zipped release
+        uses: actions/upload-artifact@v2
+        with:
+          name: MacroTracker-Linux-Package
+          path: release/MacroTracker-Linux.zip
