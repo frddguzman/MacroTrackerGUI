@@ -1,0 +1,32 @@
+name: Build on Windows, Linux, and macOS
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      
+      - name: Install dependencies
+        run: |
+          pip install pyinstaller
+          pip install -r requirements.txt  # or whatever your deps
+      
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller --onefile --windowed macro_tracker_gui_clean.py
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.os }}-build
+          path: dist
